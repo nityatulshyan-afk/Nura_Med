@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NuraMed — Rural & Routine Telehealth Access Platform</title>
+  <meta name="description" content="Reach your doctor without the journey. Prescription reviews, doctor availability, safe AI guidance, and toll-free IVR for rural healthcare." />
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/style.css?v=4.4" />
+</head>
+<body>
+
+  <!-- G-1 & P2-1: Pinned Emergency Banner -->
+  <div class="emergency-top-banner" id="global-emergency-banner">
+    <div class="emergency-content">
+      <span class="emergency-beacon"></span>
+      <span data-i18n="emergencyBanner">In an emergency call 108 / 112 immediately</span>
+    </div>
+    <a href="tel:108" class="emergency-dial-btn" id="btn-call-108">
+      <i class="fas fa-phone-alt"></i> <span data-i18n="emergencyDial">Call 108</span>
+    </a>
+  </div>
+
+  <!-- P3-3: Low Bandwidth Mode Notification Strip -->
+  <div class="low-bandwidth-strip" id="low-bandwidth-banner">
+    <i class="fas fa-signal"></i>
+    <span><strong>Low-Bandwidth Mode Active:</strong> High-resolution video is paused. Audio and text consultation prioritized for weak 2G/3G connectivity.</span>
+  </div>
+
+  <!-- Role Perspective Indicator Strip -->
+  <div class="role-indicator-strip role-badge-patient" id="active-role-banner">
+    <i class="fas fa-id-badge"></i> Active Perspective: <strong>Patient: Ramesh Kumar (Age 62, on BP medication)</strong>
+  </div>
+
+  <!-- Hospital Header & Navigation -->
+  <header class="main-header">
+    <div class="header-container">
+      <!-- Brand Section -->
+      <div class="brand-section">
+        <div class="brand-logo-icon">
+          <i class="fas fa-heartbeat"></i>
+        </div>
+        <div>
+          <span class="brand-title">NuraMed</span>
+          <span class="brand-tagline">Telehealth</span>
+        </div>
+      </div>
+
+      <!-- Core Navigation (Single Line Clean Pills) -->
+      <nav class="main-nav">
+        <a href="#home" class="nav-link active" data-target="home" onclick="navigateTo('home'); return false;"><i class="fas fa-home"></i> <span data-i18n="navHome">Home</span></a>
+        <a href="#rx-review" class="nav-link" data-target="rx-review" onclick="navigateTo('rx-review'); return false;"><i class="fas fa-file-prescription"></i> <span data-i18n="navRxReview">Rx Review</span></a>
+        <a href="#doctors" class="nav-link" data-target="doctors" onclick="navigateTo('doctors'); return false;"><i class="fas fa-user-md"></i> <span data-i18n="navDocAvail">Doctors</span></a>
+        <a href="#connect" class="nav-link" data-target="connect" onclick="navigateTo('connect'); return false;"><i class="fas fa-video"></i> <span data-i18n="navConnect">Consult</span></a>
+        <a href="#ivr" class="nav-link" data-target="ivr" onclick="navigateTo('ivr'); return false;"><i class="fas fa-phone-volume"></i> <span data-i18n="navIVR">IVR Phone</span></a>
+        <a href="#ai-assistant" class="nav-link" data-target="ai-assistant" onclick="navigateTo('ai-assistant'); return false;"><i class="fas fa-robot"></i> <span data-i18n="navAI">Setu AI</span></a>
+        <a href="#pharmacy" class="nav-link" data-target="pharmacy" onclick="navigateTo('pharmacy'); return false;"><i class="fas fa-pills"></i> <span data-i18n="navPharmacy">Pharmacy</span></a>
+        <a href="#admin" class="nav-link" data-target="admin" onclick="navigateTo('admin'); return false;"><i class="fas fa-chart-line"></i> <span data-i18n="navAdmin">Admin</span></a>
+      </nav>
+
+      <!-- Utility Controls -->
+      <div class="header-actions">
+        <!-- Role Switcher (G-2) -->
+        <div class="role-switcher-wrap">
+          <select id="role-switcher-select" class="role-select-compact" title="Switch Role Perspective" onchange="switchRole(this.value)">
+            <option value="patient">👤 Patient</option>
+            <option value="doctor">🩺 Doctor</option>
+            <option value="asha">🤝 ASHA</option>
+            <option value="pharmacy">💊 Pharmacy</option>
+            <option value="admin">⚙️ Admin</option>
+          </select>
+        </div>
+
+        <!-- Accessibility Controls (G-5) -->
+        <button class="tool-btn icon-only" id="btn-toggle-font" title="Font Size: Normal (Click to enlarge)" onclick="toggleFontSize()">
+          <span class="font-size-text">A</span>
+        </button>
+        <button class="tool-btn icon-only" id="btn-toggle-contrast" title="Toggle High Contrast Mode" onclick="toggleHighContrast()">
+          <i class="fas fa-adjust"></i>
+        </button>
+        <button class="tool-btn icon-only" id="btn-toggle-bandwidth" title="Toggle Low-Bandwidth Mode" onclick="toggleLowBandwidth()">
+          <i class="fas fa-wifi"></i>
+        </button>
+
+        <!-- Language Toggles (G-4) -->
+        <div class="lang-switch-group">
+          <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">EN</button>
+          <button class="lang-btn" data-lang="hi" onclick="setLanguage('hi')">हिन्दी</button>
+          <button class="lang-btn" data-lang="rj" title="Phase 2 Roadmap" onclick="setLanguage('rj')">राज*</button>
+        </div>
+
+        <!-- PRD Test Suite Runner Button -->
+        <button class="btn btn-xs btn-primary btn-tests-compact" id="btn-open-test-suite" title="Run PRD Section 14 Tests" onclick="openTestRunner()">
+          <i class="fas fa-vial"></i> <span>Tests</span>
+        </button>
+
+        <!-- Backend Status Indicator -->
+        <span id="backend-status-indicator" class="backend-badge cached" title="InsForge BaaS Connection">
+          <span class="status-dot"></span> BaaS
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <script>
+    // Bulletproof immediate navigation handler available from initial page load
+    window.navigateTo = function(sectionId) {
+      console.log('[NuraMed Navigation] Switching section to:', sectionId);
+      if (window.app && typeof window.app.navigateTo === 'function') {
+        window.app.navigateTo(sectionId);
+        return;
+      }
+      // Instant fallback switching
+      document.querySelectorAll('.app-section').forEach(function(sec) {
+        sec.classList.remove('active');
+      });
+      var target = document.getElementById('section-' + sectionId);
+      if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      document.querySelectorAll('.nav-link').forEach(function(link) {
+        var t = link.getAttribute('data-target') || (link.getAttribute('href') || '').replace('#', '');
+        link.classList.toggle('active', t === sectionId);
+      });
+    };
+
+    // Role switcher helper: changes perspective AND navigates to the matching operational portal
+    window.switchRole = function(role) {
+      console.log('[NuraMed Role] Switching role to:', role);
+      if (window.app && typeof window.app.switchRole === 'function') {
+        window.app.switchRole(role);
+      } else {
+        var select = document.getElementById('role-switcher-select');
+        if (select) select.value = role;
+        if (role === 'doctor') window.navigateTo('rx-review');
+        else if (role === 'asha') window.navigateTo('rx-review');
+        else if (role === 'pharmacy') window.navigateTo('pharmacy');
+        else if (role === 'admin') window.navigateTo('admin');
+        else window.navigateTo('home');
+      }
+    };
+
+    // Immediate accessibility handlers
+    window.toggleFontSize = function() {
+      if (window.app && typeof window.app.fontSizeLevel !== 'undefined') {
+        var btn = document.getElementById('btn-toggle-font');
+        if (btn) btn.click();
+      } else {
+        document.body.classList.toggle('font-large');
+      }
+    };
+
+    window.toggleHighContrast = function() {
+      if (window.app && typeof window.app.isHighContrast !== 'undefined') {
+        var btn = document.getElementById('btn-toggle-contrast');
+        if (btn) btn.click();
+      } else {
+        document.body.classList.toggle('high-contrast-mode');
+        document.body.classList.toggle('dark-theme');
+      }
+    };
+
+    window.toggleLowBandwidth = function() {
+      var btn = document.getElementById('btn-toggle-bandwidth');
+      if (btn) btn.click();
+    };
+
+    window.setLanguage = function(lang) {
+      document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+      });
+      if (window.i18n) window.i18n.setLanguage(lang);
+    };
+
+    window.openTestRunner = function() {
+      if (window.app && typeof window.app.openModal === 'function') {
+        window.app.openModal('prd-test-runner-modal');
+      } else {
+        var modal = document.getElementById('prd-test-runner-modal');
+        if (modal) modal.classList.add('active');
+      }
+    };
+
+    // Immediate click delegation for all nav links & hash routing
+    document.addEventListener('click', function(e) {
+      var link = e.target.closest('.nav-link');
+      if (link) {
+        e.preventDefault();
+        var target = link.getAttribute('data-target') || (link.getAttribute('href') || '').replace('#', '');
+        if (target) {
+          window.location.hash = target;
+          window.navigateTo(target);
+        }
+      }
+    });
+
+    window.addEventListener('hashchange', function() {
+      var hash = (window.location.hash || '').replace('#', '');
+      if (hash && document.getElementById('section-' + hash)) {
+        window.navigateTo(hash);
+      }
+    });
+  </script>
+
+  <!-- Main Application Body -->
+  <main class="app-container">
+
+    <!-- ======================================================================
+         SECTION: HOME & 3D INTERACTIVE ANATOMY (PICTURE 1 & 2 STYLE)
+         ====================================================================== -->
+    <section id="section-home" class="app-section active">
+      <!-- Main Hospital Hero Stage (Seamless Ambient 3D + Modern Split Hero) -->
+      <div class="hero-hospital-stage">
+        
+        <div class="hero-stage-grid">
+          
+          <!-- Left Column: Hero Content & Telehealth Direct Portals -->
+          <div class="hero-content-column">
+            <div class="hero-pill-badge">
+              <i class="fas fa-hospital-symbol"></i> NuraMed Telehealth • Verified Clinical Access
+            </div>
+            <h1 class="hero-main-title">
+              Compassionate Care. <br><span>Better Health. Stronger Tomorrow.</span>
+            </h1>
+            <p class="hero-main-desc">
+              Reach your doctor without the journey. Routine dosage reviews, verified doctor availability, safe source-grounded AI guidance, and 24/7 toll-free IVR for rural healthcare access.
+            </p>
+            
+            <!-- Quick Action Buttons -->
+            <div class="hero-action-buttons">
+              <button class="btn btn-primary btn-lg" onclick="navigateTo('rx-review')">
+                <i class="fas fa-file-prescription"></i> Request Dosage Review
+              </button>
+              <button class="btn btn-secondary btn-lg" onclick="navigateTo('doctors')">
+                <i class="fas fa-user-md"></i> Find Available Doctors
+              </button>
+              <button class="btn btn-outline btn-lg" onclick="navigateTo('ivr')">
+                <i class="fas fa-phone-alt"></i> Toll-Free IVR: 1800-NURAMED
+              </button>
+            </div>
+
+            <!-- Clinical Trust Highlights -->
+            <div class="hero-trust-row">
+              <div class="hero-trust-item">
+                <i class="fas fa-check-circle"></i> <span>Prescription & Stored Dosage Protected</span>
+              </div>
+              <div class="hero-trust-item">
+                <i class="fas fa-user-shield"></i> <span>100+ Verified Doctors & AIIMS Specialists</span>
+              </div>
+              <div class="hero-trust-item">
+                <i class="fas fa-phone-volume"></i> <span>1800-NURAMED 24/7 Rural Audio IVR</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Sleek 3D Ambient Visual (Blends Seamlessly in Background - No Box) -->
+          <div class="hero-3d-ambient-wrap">
+            
+            <!-- Sleek Minimalist Organ Selector Pill -->
+            <div class="stage-organ-switcher-pill" id="stage-organ-switcher-pill">
+              <button type="button" class="organ-tab-btn active" id="btn-organ-heart" data-organ="heart" onclick="setOrgan('heart')">
+                <i class="fas fa-heart"></i> Heart
+              </button>
+              <button type="button" class="organ-tab-btn" id="btn-organ-lungs" data-organ="lungs" onclick="setOrgan('lungs')">
+                <i class="fas fa-lungs"></i> Lungs
+              </button>
+              <button type="button" class="organ-tab-btn" id="btn-organ-brain" data-organ="brain" onclick="setOrgan('brain')">
+                <i class="fas fa-brain"></i> Brain
+              </button>
+              <button type="button" class="organ-tab-btn" id="btn-organ-torso" data-organ="torso" onclick="setOrgan('torso')">
+                <i class="fas fa-male"></i> Torso
+              </button>
+            </div>
+
+            <script>
+              window.setOrgan = function(type) {
+                console.log('[NuraMed] Switch organ requested:', type);
+                try {
+                  var viewer = window.anatomy || window.anatomyViewerInstance || (window.app && window.app.anatomy);
+                  if (viewer && typeof viewer.setOrgan === 'function') {
+                    viewer.setOrgan(type);
+                  } else if (window.app && typeof window.app.setOrgan === 'function') {
+                    window.app.setOrgan(type);
+                  } else {
+                    console.warn('[NuraMed] Viewer instance not yet ready, retrying...');
+                    setTimeout(function() {
+                      var v2 = window.anatomy || window.anatomyViewerInstance || (window.app && window.app.anatomy);
+                      if (v2 && typeof v2.setOrgan === 'function') v2.setOrgan(type);
+                    }, 150);
+                  }
+                } catch (err) {
+                  console.error('[NuraMed] Error in setOrgan:', err);
+                }
+                document.querySelectorAll('.organ-tab-btn').forEach(function(btn) {
+                  var organ = btn.getAttribute('data-organ') || btn.dataset.organ;
+                  btn.classList.toggle('active', organ === type);
+                });
+              };
+            </script>
+
+            <!-- WebGL 3D Canvas (Frameless, transparent, natural ambient decor) -->
+            <div class="anatomy-hero-canvas-wrap" id="anatomy-canvas-container">
+              <!-- Three.js renders 3D sleek realistic organ here -->
+            </div>
+
+            <!-- Sleek Floating Telemetry Glass Chips -->
+            <div class="sleek-floating-pill pill-top-left">
+              <div class="telemetry-live-dot"></div>
+              <div>
+                <div class="telemetry-pill-val" id="widget-telemetry-rate">72 BPM</div>
+                <div class="telemetry-pill-label" id="widget-telemetry-title">Sinus Rhythm Active</div>
+              </div>
+            </div>
+
+            <div class="sleek-floating-pill pill-bottom-right">
+              <i class="fas fa-heartbeat" style="color:#10b981; font-size:1.1rem;"></i>
+              <div>
+                <div class="telemetry-pill-val">SpO2 98% • 120/80</div>
+                <div class="telemetry-pill-label" id="widget-telemetry-sub">Hemodynamic Vitals Stable</div>
+              </div>
+            </div>
+
+            <!-- Popover Hotspot Inspection Card (Center overlay on 3D click) -->
+            <div id="anatomy-hotspot-card" class="hotspot-floating-card">
+              <!-- Populated on 3D pin click -->
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Hospital Key Statistics Banner (Picture 1 Style) -->
+      <div class="hospital-stats-banner">
+        <div class="hosp-stat-item">
+          <div class="hosp-stat-icon"><i class="fas fa-user-check"></i></div>
+          <div>
+            <div class="hosp-stat-num">50K+</div>
+            <div class="hosp-stat-label">Routine Reviews Completed</div>
+          </div>
+        </div>
+
+        <div class="hosp-stat-item">
+          <div class="hosp-stat-icon"><i class="fas fa-user-md"></i></div>
+          <div>
+            <div class="hosp-stat-num">100+</div>
+            <div class="hosp-stat-label">Government & Private Doctors</div>
+          </div>
+        </div>
+
+        <div class="hosp-stat-item">
+          <div class="hosp-stat-icon"><i class="fas fa-clinic-medical"></i></div>
+          <div>
+            <div class="hosp-stat-num">15+</div>
+            <div class="hosp-stat-label">Dist. Primary Health Centres</div>
+          </div>
+        </div>
+
+        <div class="hosp-stat-item">
+          <div class="hosp-stat-icon"><i class="fas fa-phone-volume"></i></div>
+          <div>
+            <div class="hosp-stat-num">24/7</div>
+            <div class="hosp-stat-label">Toll-Free 1800-NURAMED IVR</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION: PORTAL 1 - PRESCRIPTION & DOSAGE REVIEW (P1-1 to P1-11)
+         ====================================================================== -->
+    <section id="section-rx-review" class="app-section">
+      <div class="portal-layout-grid">
+        
+        <!-- Left: Patient Submission Form (P1-1, P1-6, G-7) -->
+        <div class="panel-card" id="patient-request-form-container">
+          <!-- ASHA Proxy Submission Banner if active -->
+          <div id="asha-proxy-banner" style="display:none; background:rgba(245,158,11,0.15); border:1px solid #f59e0b; padding:10px; border-radius:6px; margin-bottom:14px; font-size:0.85rem; color:#fde68a;">
+            <i class="fas fa-hands-helping"></i> <strong>ASHA Worker Mode (Sunita):</strong> Submitting on behalf of a patient without smartphone/digital access.
+            <div style="margin-top:6px;">
+              <label class="form-label">Patient Name (Beneficiary):</label>
+              <input type="text" id="proxy-patient-name" class="form-input" value="Ramu Lal" />
+            </div>
+          </div>
+
+          <div class="panel-header">
+            <h2 class="panel-title" data-i18n="portal1Title">
+              <i class="fas fa-file-prescription"></i> Prescription & Dosage Review
+            </h2>
+            <p class="panel-subtitle" data-i18n="portal1Subtitle">
+              Request a medicine or dosage review remotely. The doctor makes every decision. Stored dosage stays unchanged until approved.
+            </p>
+          </div>
+
+          <form id="prescription-review-form">
+            <!-- Hidden inputs for patient details -->
+            <input type="hidden" id="patient-name-input" value="Ramesh Kumar" />
+            <input type="hidden" id="patient-age-input" value="62" />
+            <input type="hidden" id="patient-phone-input" value="+91 98765 43210" />
+
+            <div class="form-group">
+              <label class="form-label" data-i18n="currentMedicineLabel">Current Prescribed Medicine (from existing prescription)</label>
+              <select id="review-medicine-select" class="form-select">
+                <option value="Amlodipine 5mg">Amlodipine 5mg (Antihypertensive)</option>
+                <option value="Metformin 500mg">Metformin 500mg (Blood Sugar)</option>
+                <option value="Atenolol 50mg">Atenolol 50mg (Beta Blocker)</option>
+                <option value="Salbutamol Inhaler (100mcg)">Salbutamol Inhaler (100mcg)</option>
+                <option value="Atorvastatin 10mg">Atorvastatin 10mg (Lipid care)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" data-i18n="currentDosageLabel">Current Dosage & Schedule</label>
+              <input type="text" id="review-current-dose" class="form-input" value="1 tablet daily (morning after breakfast)" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" data-i18n="reasonLabel">Reason for Review Request</label>
+              <select id="review-reason-select" class="form-select">
+                <option value="Side effect">Experiencing side effect</option>
+                <option value="Dose too high or low">Dose feels too high or too low</option>
+                <option value="Missed dose">Missed doses / Irregular schedule</option>
+                <option value="Medication running out">Medication running out (Refill review)</option>
+                <option value="Other">Other routine review</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Issue Description (Patient's Words)</label>
+              <textarea id="review-issue-desc" class="form-textarea" placeholder="Describe symptoms or how you feel after taking the medicine...">Feeling occasional morning dizziness and lightheadedness after taking tablet for 3 weeks.</textarea>
+            </div>
+
+            <!-- P1-6: Side-effect symptom checklist -->
+            <div class="form-group">
+              <label class="form-label" data-i18n="sideEffectsLabel">
+                Side-Effect Symptom Checklist (Red-flag symptoms trigger Urgent alert)
+              </label>
+              <div class="checklist-grid">
+                <label class="form-check"><input type="checkbox" class="symptom-checkbox" value="Dizziness" checked /> Dizziness / Lightheaded</label>
+                <label class="form-check"><input type="checkbox" class="symptom-checkbox" value="Nausea" /> Nausea / Stomach upset</label>
+                <label class="form-check"><input type="checkbox" class="symptom-checkbox" value="Rash / Itching" /> Skin Rash or Itching</label>
+                <label class="form-check"><input type="checkbox" class="symptom-checkbox" value="Swelling in Feet" /> Ankle / Feet Swelling</label>
+                <label class="form-check"><input type="checkbox" class="symptom-checkbox" value="Breathlessness" /> Shortness of breath (Red-flag)</label>
+                <label class="form-check"><input type="checkbox" class="symptom-checkbox" value="Chest Pain" /> Chest discomfort (Red-flag)</label>
+              </div>
+            </div>
+
+            <!-- P1-8: Urgent Flag auto-suggested container -->
+            <div id="urgent-flag-container" style="display:none; margin-bottom:14px; background:rgba(239,68,68,0.15); border:1px solid #ef4444; padding:8px 12px; border-radius:6px;">
+              <label class="form-check" style="margin-bottom:0; color:#fca5a5;">
+                <input type="checkbox" id="review-is-urgent" />
+                <strong>Flag as "URGENT" for Doctor Queue</strong> (Auto-suggested due to red-flag symptoms)
+              </label>
+            </div>
+
+            <!-- G-7: Explicit Consent Checkbox -->
+            <div class="form-check" style="margin-bottom:18px;">
+              <input type="checkbox" id="review-consent" checked />
+              <label for="review-consent" data-i18n="consentLabel">
+                I give consent to share my health information and symptoms for clinical evaluation by a licensed doctor.
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submit-review-btn" style="width:100%;">
+              <i class="fas fa-paper-plane"></i> <span data-i18n="submitReviewBtn">Submit Review Request</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Doctor Unified Review Queue (P1-2, P1-3, P1-4) -->
+        <div class="panel-card" id="doctor-queue-container">
+          <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h2 class="panel-title" data-i18n="doctorQueueTitle">
+                <i class="fas fa-tasks"></i> Doctor Clinical Review Queue
+              </h2>
+              <p class="panel-subtitle">Receives submissions from Patient App, Toll-Free IVR, and ASHA health workers in one shared queue.</p>
+            </div>
+            <button class="btn btn-sm btn-outline" onclick="app.refreshData()"><i class="fas fa-sync-alt"></i> Refresh</button>
+          </div>
+
+          <!-- Doctor Queue List -->
+          <div id="doctor-queue-list">
+            <!-- Dynamically populated from InsForge nuramed_requests -->
+          </div>
+
+          <!-- P1-7: Patient Prescription History Timeline -->
+          <div style="margin-top:28px; padding-top:20px; border-top:1px solid var(--border-color);">
+            <h3 style="font-size:1.05rem; margin-bottom:14px; color:#ffffff;">
+              <i class="fas fa-history"></i> Prescription History Timeline (Ramesh Kumar)
+            </h3>
+            <div id="patient-rx-history-timeline" class="timeline-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION: PORTAL 2 - DOCTOR AVAILABILITY & PHC (P2-1 to P2-9)
+         ====================================================================== -->
+    <section id="section-doctors" class="app-section">
+      <!-- Toolbar Filters -->
+      <div class="filter-toolbar">
+        <div>
+          <h2 style="font-size:1.3rem; color:#ffffff;" data-i18n="availabilityTitle">Doctor Availability & Primary Health Centres</h2>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">Real-time availability updated by doctors. Select an online doctor to begin consult.</p>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <!-- P2-3 Specialty filter -->
+          <select id="doctor-specialty-filter" class="form-select">
+            <option value="all">All Specialties</option>
+            <option value="General">General Medicine</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Pulmonology">Pulmonology</option>
+            <option value="Emergency">Emergency</option>
+          </select>
+
+          <!-- P2-5 Language filter -->
+          <select id="doctor-language-filter" class="form-select">
+            <option value="all">All Languages</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Rajasthani">Rajasthani</option>
+            <option value="English">English</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Doctor Cards Grid (P2-2) -->
+      <div class="doctor-cards-grid" id="doctor-availability-grid">
+        <!-- Dynamically populated from InsForge nuramed_doctors -->
+      </div>
+
+      <!-- P2-8: Primary Health Centre & Hospital List -->
+      <div class="panel-card" style="margin-top:24px;">
+        <div class="panel-header">
+          <h3 class="panel-title"><i class="fas fa-hospital-user"></i> Nearest Primary Health Centres (PHC) & Emergency Facilities (P2-8, P2-9)</h3>
+          <p class="panel-subtitle">Verified public healthcare network coordinates for physical referral or emergency transport.</p>
+        </div>
+
+        <div class="phc-locator-grid">
+          <div>
+            <div class="phc-item">
+              <div class="phc-header">
+                <strong>Primary Health Centre (PHC) Phagi</strong>
+                <span class="phc-dist"><i class="fas fa-location-arrow"></i> 4.2 km</span>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-secondary); margin:4px 0;">Community facility • 12 Beds • Ambulance 108 on-call</p>
+              <div style="font-size:0.78rem; color:#38bdf8;">Doctors on duty: Dr. Vikram Rathore (Community Health)</div>
+            </div>
+
+            <div class="phc-item">
+              <div class="phc-header">
+                <strong>Sawai Man Singh (SMS) Medical College Hospital</strong>
+                <span class="phc-dist"><i class="fas fa-location-arrow"></i> 26.5 km</span>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-secondary); margin:4px 0;">Tertiary Referral Center • 24/7 Cardiac Emergency & Cath Lab</p>
+              <div style="font-size:0.78rem; color:#38bdf8;">Cardiology on-call: Dr. Rajesh Verma</div>
+            </div>
+
+            <div class="phc-item">
+              <div class="phc-header">
+                <strong>AIIMS Affiliate District Hospital</strong>
+                <span class="phc-dist"><i class="fas fa-location-arrow"></i> 38.0 km</span>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-secondary); margin:4px 0;">Super-specialty tele-ICU link • Trauma Unit</p>
+            </div>
+          </div>
+
+          <!-- Interactive Simulated Map (P2-9) -->
+          <div class="map-simulation-box">
+            <div class="map-grid-lines"></div>
+            
+            <div class="map-marker marker-phc" title="PHC Phagi (4.2 km)">
+              <i class="fas fa-map-marker-alt" style="color:#10b981;"></i>
+              <span>PHC Phagi</span>
+            </div>
+
+            <div class="map-marker marker-sms" title="SMS Hospital (26 km)">
+              <i class="fas fa-hospital" style="color:#38bdf8;"></i>
+              <span>SMS Hospital</span>
+            </div>
+
+            <div class="map-marker marker-aiims" title="AIIMS District (38 km)">
+              <i class="fas fa-plus-circle" style="color:#ef4444;"></i>
+              <span>AIIMS District</span>
+            </div>
+
+            <div style="position:absolute; bottom:10px; right:12px; font-size:0.75rem; background:rgba(0,0,0,0.7); padding:3px 8px; border-radius:4px; color:#94a3b8;">
+              <i class="fas fa-satellite"></i> GIS Grid View (Simulated)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION: PORTAL 3 - DOCTOR-PATIENT CONNECT (P3-1 to P3-9)
+         ====================================================================== -->
+    <section id="section-connect" class="app-section">
+      <div class="connect-layout-grid">
+        
+        <!-- Left: Video Consult Room (P3-2, P3-3) -->
+        <div class="video-consult-stage">
+          <div class="video-feeds-container">
+            <!-- Doctor Remote Feed (Simulated WebRTC) -->
+            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=900" 
+                 alt="Doctor Live Feed" class="remote-doc-feed" id="remote-doc-video" />
+
+            <!-- Patient Local Picture-in-Picture -->
+            <div class="local-patient-pip" id="local-video-feed">
+              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=300" alt="Patient Feed" />
+              <span style="position:absolute; bottom:2px; left:4px; font-size:0.65rem; background:rgba(0,0,0,0.7); color:#fff; padding:1px 4px; border-radius:2px;">You</span>
+            </div>
+
+            <!-- Header Telemetry Bar -->
+            <div class="video-overlay-bar">
+              <span class="status-dot" style="background:#10b981;"></span>
+              <span>Consultation with <strong id="active-consult-doc-name">Dr. Meera Sharma</strong></span>
+              <span class="consult-timer" id="consult-call-timer">00:00</span>
+            </div>
+          </div>
+
+          <!-- Video Call Controls Dock -->
+          <div class="video-control-dock">
+            <button class="dock-btn" id="video-ctrl-mic" title="Mute/Unmute Mic"><i class="fas fa-microphone"></i></button>
+            <button class="dock-btn" id="video-ctrl-cam" title="Turn Camera Off"><i class="fas fa-video"></i></button>
+            <button class="dock-btn" onclick="app.speakText('Doctor is listening to your consultation. Audio stream connected.', 'en-IN')" title="Text-to-Speech (P3-8)"><i class="fas fa-volume-up"></i></button>
+            <button class="dock-btn end-call" id="video-ctrl-end" title="End Consultation"><i class="fas fa-phone-slash"></i></button>
+          </div>
+
+          <!-- P3-5 Pre-Call Form & P3-7 Post-Consult Note -->
+          <div style="padding:16px; background:#0b1320; border-top:1px solid var(--border-color);">
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:8px; padding:12px; margin-bottom:12px;">
+              <h5 style="color:#ffffff; font-size:0.85rem; margin-bottom:4px;">
+                <i class="fas fa-clipboard-list"></i> Pre-Call Triage Form (Shared with Doctor)
+              </h5>
+              <div style="font-size:0.8rem; color:var(--text-secondary); display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">
+                <div><strong>Symptoms:</strong> Morning Dizziness</div>
+                <div><strong>Duration:</strong> 3 weeks</div>
+                <div><strong>Current Med:</strong> Amlodipine 5mg</div>
+              </div>
+            </div>
+
+            <div id="post-consult-summary-box" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- Right: Text Chat with Doctor (P3-1) -->
+        <div class="panel-card chat-container">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fas fa-comments"></i> Clinical Text Consultation</h3>
+            <p class="panel-subtitle">Real-time or asynchronous messaging with Dr. Meera Sharma.</p>
+          </div>
+
+          <div class="chat-messages-area" id="doctor-chat-messages">
+            <!-- Messages populated dynamically -->
+          </div>
+
+          <div class="chat-input-row">
+            <input type="text" id="doctor-chat-input" class="form-input" placeholder="Type message to doctor..." />
+            <button class="btn btn-primary" id="doctor-chat-send-btn"><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION: PORTAL 4 - TOLL-FREE IVR PHONE SIMULATOR (P4-1 to P4-9)
+         ====================================================================== -->
+    <section id="section-ivr" class="app-section">
+      <div class="ivr-simulator-wrapper">
+        
+        <!-- Left: Interactive Handset Device -->
+        <div class="phone-handset-card">
+          <div class="phone-top-speaker"></div>
+
+          <!-- Handset Screen -->
+          <div class="phone-screen" id="ivr-screen-status">
+            <span class="screen-idle">
+              <i class="fas fa-phone-alt" style="font-size:1.8rem; color:#38bdf8; margin-bottom:8px;"></i><br/>
+              <strong>1800-NURAMED</strong><br/>
+              <span style="font-size:0.75rem; color:#94a3b8;">Toll-free voice line for non-smartphones</span>
+            </span>
+          </div>
+
+          <!-- Keypad Matrix (P4-1) -->
+          <div class="keypad-grid">
+            <button class="ivr-key" data-key="1"><strong>1</strong><span>DOCTOR</span></button>
+            <button class="ivr-key" data-key="2"><strong>2</strong><span>REVIEW</span></button>
+            <button class="ivr-key" data-key="3"><strong>3</strong><span>AVAIL</span></button>
+            <button class="ivr-key" data-key="4"><strong>4</strong><span>GHI</span></button>
+            <button class="ivr-key" data-key="5"><strong>5</strong><span>JKL</span></button>
+            <button class="ivr-key" data-key="6"><strong>6</strong><span>MNO</span></button>
+            <button class="ivr-key" data-key="7"><strong>7</strong><span>PQRS</span></button>
+            <button class="ivr-key" data-key="8"><strong>8</strong><span>TUV</span></button>
+            <button class="ivr-key" data-key="9"><strong>9</strong><span>WXYZ</span></button>
+            <button class="ivr-key" data-key="*"><strong>*</strong><span>-</span></button>
+            <button class="ivr-key" data-key="0"><strong>0</strong><span>CALLBACK</span></button>
+            <button class="ivr-key" data-key="#"><strong>#</strong><span>-</span></button>
+          </div>
+
+          <!-- Call / Hangup Button -->
+          <div class="phone-action-btn-row">
+            <button class="btn btn-success btn-call" id="ivr-toggle-call-btn">
+              <i class="fas fa-phone-alt"></i> Call 1800-NURAMED
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: IVR Flow Explainer & Features -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <h2 class="panel-title" data-i18n="ivrTitle">
+              <i class="fas fa-phone-volume"></i> Toll-Free IVR Phone Simulator (Twilio Voice)
+            </h2>
+            <p class="panel-subtitle" data-i18n="ivrSubtitle">
+              Provides elderly, low-literacy, and basic feature-phone users identical access via voice telephony.
+            </p>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:8px; padding:14px; margin-bottom:16px;">
+            <h4 style="color:#ffffff; font-size:0.95rem; margin-bottom:10px;">
+              <i class="fas fa-list-ol"></i> Hindi Voice Menu Navigation:
+            </h4>
+            <ul style="font-size:0.85rem; color:var(--text-secondary); line-height:1.7; padding-left:20px;">
+              <li><strong style="color:#38bdf8;">Press 1:</strong> Talk directly to an available doctor</li>
+              <li><strong style="color:#38bdf8;">Press 2:</strong> Prescription review request — records patient's spoken problem into shared queue</li>
+              <li><strong style="color:#38bdf8;">Press 3:</strong> Audio readout of doctor availability and duty roster</li>
+              <li><strong style="color:#38bdf8;">Press 0:</strong> Request human doctor callback</li>
+              <li><strong style="color:#f59e0b;">Invalid Key:</strong> Repeats voice menu; pressing 0 routes to callback (P4-4)</li>
+            </ul>
+          </div>
+
+          <!-- P4-6: Missed-Call-Back Service -->
+          <div style="background:rgba(16,185,129,0.1); border:1px solid #10b981; border-radius:8px; padding:14px; margin-bottom:16px;">
+            <h4 style="color:#34d399; font-size:0.92rem; margin-bottom:6px;">
+              <i class="fas fa-phone-slash"></i> Missed-Call-Back Service (P4-6)
+            </h4>
+            <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:10px;">
+              Patient gives a single missed call; system logs caller number and schedules doctor callback at zero financial cost to the patient.
+            </p>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="ivr-phone-input" class="form-input" value="+91 94140 88219" style="max-width:200px;" />
+              <button class="btn btn-sm btn-success" id="ivr-missed-call-btn">
+                <i class="fas fa-phone-square-alt"></i> Trigger Missed Call
+              </button>
+            </div>
+          </div>
+
+          <!-- Spoken Red-Flag Trigger Demo -->
+          <div style="font-size:0.8rem; color:var(--text-muted);">
+            <i class="fas fa-info-circle"></i> <strong>Spoken Red-Flag Safety:</strong> If caller mentions chest pain or breathless distress during Option 2 recording, the IVR halts normal intake and advises dialing 108 immediately (P4-9).
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION: AI HEALTH ASSISTANT ("SETU SAHAYAK") (AI-1 to AI-10)
+         ====================================================================== -->
+    <section id="section-ai-assistant" class="app-section">
+      <div style="max-width:900px; margin:0 auto;">
+        
+        <div class="panel-card chat-container" style="height:620px;">
+          <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h2 class="panel-title" data-i18n="aiAssistantTitle">
+                <i class="fas fa-robot"></i> Setu Sahayak — Safe AI Health Assistant
+              </h2>
+              <p class="panel-subtitle" data-i18n="aiDisclaimer">
+                Basic guidance on minor issues and first aid grounded in WHO/MoHFW verified guides. No diagnosis, no dosing.
+              </p>
+            </div>
+            <span class="badge badge-approved"><i class="fas fa-shield-alt"></i> Source-Grounded</span>
+          </div>
+
+          <!-- Chat Feed -->
+          <div class="chat-messages-area" id="ai-chat-messages">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Photo Upload & Input Controls -->
+          <div style="background:rgba(0,0,0,0.3); border-top:1px solid var(--border-color); padding:10px 16px;">
+            <!-- AI-6, G-7 Consent & Photo Upload Row -->
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; font-size:0.8rem;">
+              <label class="form-check" style="margin-bottom:0;">
+                <input type="checkbox" id="ai-photo-consent" checked />
+                <span>Consent to analyze image (EXIF data automatically stripped)</span>
+              </label>
+
+              <label class="tool-btn" style="cursor:pointer;" title="Upload wound / rash photo for first aid analysis">
+                <i class="fas fa-camera"></i> Upload Photo (AI-6)
+                <input type="file" id="ai-wound-photo-upload" accept="image/*" style="display:none;" />
+              </label>
+            </div>
+
+            <div class="chat-input-row" style="padding:0; background:transparent; border-top:none;">
+              <input type="text" id="ai-chat-input" class="form-input" data-i18n="aiPlaceholder" placeholder="Ask about minor symptoms (fever, cold, minor burns, dehydration)..." />
+              <button class="btn btn-primary" id="ai-chat-send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION: PHARMACY PORTAL (SIDE PORTAL B: PH-1, PH-2)
+         ====================================================================== -->
+    <section id="section-pharmacy" class="app-section">
+      <div class="panel-card">
+        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h2 class="panel-title"><i class="fas fa-prescription-bottle-alt"></i> Jan Aushadhi Kendra — Pharmacy Portal (PH-1, PH-2)</h2>
+            <p class="panel-subtitle">Access to approved prescriptions ONLY. Pending dosage requests are strictly hidden for patient safety.</p>
+          </div>
+          <span class="badge badge-approved"><i class="fas fa-check-shield"></i> Read-Only Filter Active</span>
+        </div>
+
+        <div id="pharmacy-prescriptions-list">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION: ADMIN PORTAL & AUDIT LOGS (AD-1 to AD-5)
+         ====================================================================== -->
+    <section id="section-admin" class="app-section">
+      <!-- Admin Metric Overview Cards (AD-2, AD-4) -->
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px;">
+        <div class="panel-card" style="padding:16px;">
+          <span style="font-size:0.8rem; color:var(--text-muted);">Total Review Requests</span>
+          <h3 id="admin-metric-total" style="font-size:1.8rem; color:#38bdf8; margin-top:4px;">0</h3>
+        </div>
+        <div class="panel-card" style="padding:16px;">
+          <span style="font-size:0.8rem; color:var(--text-muted);">Pending Review Queue</span>
+          <h3 id="admin-metric-pending" style="font-size:1.8rem; color:#f59e0b; margin-top:4px;">0</h3>
+        </div>
+        <div class="panel-card" style="padding:16px;">
+          <span style="font-size:0.8rem; color:var(--text-muted);">Decisions Completed</span>
+          <h3 id="admin-metric-completed" style="font-size:1.8rem; color:#10b981; margin-top:4px;">0</h3>
+        </div>
+        <div class="panel-card" style="padding:16px;">
+          <span style="font-size:0.8rem; color:var(--text-muted);">Avg Response Time (AD-4)</span>
+          <h3 id="admin-metric-avg-time" style="font-size:1.8rem; color:#c084fc; margin-top:4px;">14 mins</h3>
+        </div>
+      </div>
+
+      <div class="portal-layout-grid" style="margin-bottom:24px;">
+        <!-- Left: Intake Source Breakdown -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fas fa-chart-pie"></i> Intake Source Distribution</h3>
+            <p class="panel-subtitle">Channel breakdown: App vs IVR Phone vs ASHA Workers.</p>
+          </div>
+          <div id="admin-source-breakdown"></div>
+        </div>
+
+        <!-- Right: Doctor Roster Management (AD-1) -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fas fa-user-plus"></i> Add Doctor to Roster (AD-1)</h3>
+          </div>
+          <form id="admin-add-doctor-form">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+              <input type="text" id="admin-new-doc-name" class="form-input" placeholder="Doctor Full Name" required />
+              <input type="text" id="admin-new-doc-spec" class="form-input" placeholder="Specialty" required />
+            </div>
+            <div style="margin-bottom:12px;">
+              <input type="text" id="admin-new-doc-lang" class="form-input" placeholder="Languages (e.g. Hindi, English)" required />
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Register Doctor</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- AD-3: Call Logs & IVR Usage -->
+      <div class="panel-card" style="margin-bottom:24px;">
+        <div class="panel-header">
+          <h3 class="panel-title"><i class="fas fa-phone-square"></i> Toll-Free Call Logs & Voice Intake (AD-3)</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="clinical-table">
+            <thead>
+              <tr>
+                <th>Call ID</th>
+                <th>Caller Phone</th>
+                <th>Menu Route</th>
+                <th>Spoken Intake / Transcription</th>
+                <th>Status</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="admin-call-logs-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- G-3, AD-5: Immutable Clinical Audit Log -->
+      <div class="panel-card">
+        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h3 class="panel-title" data-i18n="navAudit"><i class="fas fa-fingerprint"></i> Immutable Clinical Audit Trail (G-3, AD-5)</h3>
+            <p class="panel-subtitle">Every clinical action (request, approve, modify, reject, call) recorded with actor, timestamp, and details.</p>
+          </div>
+          <input type="text" id="audit-search-input" class="form-input" placeholder="Filter audit logs..." style="max-width:240px;" />
+        </div>
+
+        <div class="table-responsive">
+          <table class="clinical-table">
+            <thead>
+              <tr>
+                <th>Log ID</th>
+                <th>Request ID</th>
+                <th>Role</th>
+                <th>Actor</th>
+                <th>Action</th>
+                <th>Details</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="audit-log-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================================
+       MODALS
+       ====================================================================== -->
+
+  <!-- PRD Section 14: All 12 Test Cases Runner Modal -->
+  <div class="modal-backdrop" id="prd-test-runner-modal">
+    <div class="modal-dialog" style="max-width:850px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-vial"></i> PRD Section 14: Representative Test Suite (12 Cases)</h3>
+        <button class="modal-close-btn" onclick="app.closeModal('prd-test-runner-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px;">
+          Click "Execute Test" on any case to run the live verification flow against the active InsForge backend and UI logic.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <!-- Test 1 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#1 Patient requests a higher dose</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Request goes to doctor; stored dosage remains unchanged until approved.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(1)">Execute Test</button>
+            </div>
+            <div id="test-result-1" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 2 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#2 Doctor rejects a request</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Patient notified with doctor's clinical reason.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(2)">Execute Test</button>
+            </div>
+            <div id="test-result-2" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 3 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#3 Request sent to an offline doctor</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Shows "Doctor unavailable" and recommends online alternates.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(3)">Execute Test</button>
+            </div>
+            <div id="test-result-3" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 4 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#4 Wrong key pressed on IVR</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Menu repeats cleanly; pressing 0 gives human callback.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(4)">Execute Test</button>
+            </div>
+            <div id="test-result-4" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 5 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#5 Patient types "chest pain, can't breathe"</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Immediate 108/112 warning takeover, normal chat paused.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(5)">Execute Test</button>
+            </div>
+            <div id="test-result-5" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 6 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#6 Weak internet connection</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Audio-only and low-bandwidth fallback offered.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(6)">Execute Test</button>
+            </div>
+            <div id="test-result-6" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 7 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#7 "Which medicine should I take, what dose?" in chatbot</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Refuses dosage advice, redirects to Portal 1 or doctor.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(7)">Execute Test</button>
+            </div>
+            <div id="test-result-7" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 8 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#8 Deep wound photo</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: First aid steps plus urgent doctor advice.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(8)">Execute Test</button>
+            </div>
+            <div id="test-result-8" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 9 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#9 Blurry photo uploaded</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Asks for clearer, well-lit retake.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(9)">Execute Test</button>
+            </div>
+            <div id="test-result-9" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 10 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#10 "Is this cancer?"</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: No diagnosis; strictly advises physical doctor exam.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(10)">Execute Test</button>
+            </div>
+            <div id="test-result-10" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 11 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#11 Pharmacy opens a pending prescription</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Not visible; only approved prescriptions displayed.</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(11)">Execute Test</button>
+            </div>
+            <div id="test-result-11" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+
+          <!-- Test 12 -->
+          <div class="phc-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>#12 IVR request received</strong>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:2px 0;">Expected: Appears in doctor queue with source "IVR".</p>
+              </div>
+              <button class="btn btn-xs btn-primary" onclick="app.runPRDTestCase(12)">Execute Test</button>
+            </div>
+            <div id="test-result-12" style="font-size:0.8rem; margin-top:6px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emergency 108/112 Takeover Modal (AI-2, P2-1) -->
+  <div class="modal-backdrop" id="emergency-modal">
+    <div class="modal-dialog" style="border:2px solid #ef4444;">
+      <div class="modal-header" style="background:#7f1d1d;">
+        <h3 class="modal-title" style="color:#ffffff;">
+          <i class="fas fa-exclamation-triangle"></i> EMERGENCY MEDICAL ALERT
+        </h3>
+        <button class="modal-close-btn" onclick="app.closeModal('emergency-modal')">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align:center; padding:32px 24px;">
+        <div style="width:70px; height:70px; background:#ef4444; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; color:#ffffff; font-size:2rem; animation:pulseBeacon 1s infinite;">
+          <i class="fas fa-ambulance"></i>
+        </div>
+        <h2 style="color:#ffffff; margin-bottom:8px;">Call 108 or 112 Immediately</h2>
+        <p id="emergency-modal-reason" style="color:#fca5a5; font-size:1rem; margin-bottom:20px;">Red-flag symptoms detected.</p>
+        <p style="color:var(--text-secondary); font-size:0.88rem; margin-bottom:24px;">
+          Do not rely on app messaging or asynchronous reviews for acute chest pain, severe breathlessness, heavy bleeding, or loss of consciousness.
+        </p>
+        <a href="tel:108" class="btn btn-danger" style="font-size:1.1rem; padding:12px 28px;">
+          <i class="fas fa-phone-alt"></i> Tap to Dial 108 (Ambulance)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Doctor Action Modal (Modify / Reject - P1-2) -->
+  <div class="modal-backdrop" id="doctor-action-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="doctor-action-modal-title">Doctor Clinical Action</h3>
+        <button class="modal-close-btn" onclick="app.closeModal('doctor-action-modal')">&times;</button>
+      </div>
+      <form id="doctor-action-form">
+        <div class="modal-body">
+          <input type="hidden" id="modal-action-req-id" />
+          <input type="hidden" id="modal-action-type" />
+
+          <div class="form-group" id="modal-dose-group" style="display:none;">
+            <label class="form-label">New Modified Dosage & Titration</label>
+            <input type="text" id="modal-modified-dose" class="form-input" placeholder="e.g. Reduce to 2.5mg OD in morning" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mandatory Clinical Rationale & Notes (P1-2)</label>
+            <textarea id="modal-action-notes" class="form-textarea" placeholder="Enter clinical reason for change or rejection..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="app.closeModal('doctor-action-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Decision to Audit Trail</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Prescription PDF / SMS Preview Modal (P1-9) -->
+  <div class="modal-backdrop" id="prescription-pdf-modal">
+    <div class="modal-dialog" style="background:#ffffff; color:#0f172a;">
+      <div class="modal-header" style="border-bottom:2px solid #0284c7;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <i class="fas fa-file-medical-alt" style="color:#0284c7; font-size:1.4rem;"></i>
+          <h3 style="color:#0f172a; margin:0;">NuraMed Official e-Prescription</h3>
+        </div>
+        <button class="modal-close-btn" style="color:#0f172a;" onclick="app.closeModal('prescription-pdf-modal')">&times;</button>
+      </div>
+      <div class="modal-body" style="font-family:'Inter', sans-serif;">
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #e2e8f0; padding-bottom:12px; margin-bottom:14px; font-size:0.85rem;">
+          <div>
+            <strong>Doctor:</strong> Dr. Meera Sharma, MBBS, MD<br/>
+            <span>Reg. No: MCI-2012-98442</span><br/>
+            <span>Sawai Man Singh Tele-Affiliate Clinic</span>
+          </div>
+          <div style="text-align:right;">
+            <strong>Rx Ref:</strong> <span id="pdf-modal-rx-id">RX-8091</span><br/>
+            <strong>Date:</strong> <span id="pdf-modal-date"></span>
+          </div>
+        </div>
+
+        <div style="background:#f8fafc; padding:10px; border-radius:6px; margin-bottom:14px; font-size:0.85rem;">
+          <strong>Patient:</strong> Ramesh Kumar | <strong>Age/Gender:</strong> 62 / Male | <strong>Phone:</strong> +91 98765 43210
+        </div>
+
+        <div style="font-size:1.2rem; font-weight:700; color:#0284c7; margin-bottom:8px;">℞</div>
+        <div style="font-size:0.95rem; line-height:1.6; margin-bottom:14px;">
+          <strong>1. Tab. Amlodipine 5mg</strong> — 1 tablet once daily in morning after food.<br/>
+          <em>Instructions:</em> Maintain hydration. Avoid abrupt standing. Check BP weekly.
+        </div>
+
+        <div style="background:#f0fdf4; border:1px dashed #22c55e; padding:8px 12px; border-radius:6px; font-size:0.8rem; color:#15803d; margin-bottom:14px;">
+          <i class="fas fa-check-circle"></i> Authenticated via InsForge BaaS Digital Signature. Valid for fulfillment at Jan Aushadhi Kendra or local chemist.
+        </div>
+
+        <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; font-size:0.75rem; color:#64748b;">
+          <strong>SMS Dispatched:</strong> "NuraMed: Dr. Meera Sharma has reviewed your dosage for Amlodipine 5mg. Status: Approved. Show Rx RX-8091 to pharmacy."
+        </div>
+      </div>
+      <div class="modal-footer" style="background:#f8fafc;">
+        <button class="btn btn-outline" style="color:#0f172a;" onclick="window.print()"><i class="fas fa-print"></i> Print PDF</button>
+        <button class="btn btn-primary" onclick="app.closeModal('prescription-pdf-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offline Doctor Suggested Alternate Modal (P2-4) -->
+  <div class="modal-backdrop" id="offline-doctor-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-clock"></i> Doctor Unavailable</h3>
+        <button class="modal-close-btn" onclick="app.closeModal('offline-doctor-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-secondary); margin-bottom:14px;">
+          <strong id="offline-doc-name" style="color:#ffffff;">Doctor</strong> is currently offline and not conducting live video consults.
+        </p>
+
+        <h4 style="color:#38bdf8; font-size:0.95rem; margin-bottom:8px;">Suggested Online Alternates (Available Now):</h4>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div class="phc-item" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>Dr. Meera Sharma</strong> (General Medicine)
+              <div style="font-size:0.75rem; color:#10b981;">Online Now • Next Slot: 3:30 PM</div>
+            </div>
+            <button class="btn btn-xs btn-primary" onclick="app.closeModal('offline-doctor-modal'); app.startConsultWithDoctor('doc-1', 'Dr. Meera Sharma')">Connect</button>
+          </div>
+
+          <div class="phc-item" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>Dr. Rajesh Verma</strong> (Cardiology & BP)
+              <div style="font-size:0.75rem; color:#10b981;">Online Now • Next Slot: 4:15 PM</div>
+            </div>
+            <button class="btn btn-xs btn-primary" onclick="app.closeModal('offline-doctor-modal'); app.startConsultWithDoctor('doc-2', 'Dr. Rajesh Verma')">Connect</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call Patient Dialing Modal (P1-11) -->
+  <div class="modal-backdrop" id="call-patient-modal">
+    <div class="modal-dialog" style="max-width:400px; text-align:center;">
+      <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-phone-alt"></i> Outbound Consult Call</h4>
+        <button class="modal-close-btn" onclick="app.closeModal('call-patient-modal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:28px 20px;">
+        <div style="width:60px; height:60px; background:#0284c7; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; color:#ffffff; font-size:1.6rem; animation:pulseBeacon 1.2s infinite;">
+          <i class="fas fa-phone"></i>
+        </div>
+        <h3 id="calling-patient-name" style="color:#ffffff;">Patient</h3>
+        <p id="calling-patient-phone" style="font-family:var(--font-mono); color:#38bdf8; margin-bottom:12px;">+91 98765 43210</p>
+        <span class="badge badge-approved">Ringing via Twilio Voice SIP Trunk...</span>
+      </div>
+      <div class="modal-footer" style="justify-content:center;">
+        <button class="btn btn-danger" onclick="app.closeModal('call-patient-modal')"><i class="fas fa-phone-slash"></i> Hang Up</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <!-- 1. Three.js for 3D Interactive Anatomy -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- 2. NuraMed InsForge Client Connector -->
+  <script src="js/insforge-client.js?v=4.4"></script>
+
+  <!-- 3. 3D Anatomy Engine -->
+  <script src="js/anatomy3d.js?v=4.4"></script>
+
+  <!-- 4. Localization Engine (i18n) -->
+  <script src="js/i18n.js?v=4.4"></script>
+
+  <!-- 5. Master Application Logic -->
+  <script src="js/app.js?v=4.4"></script>
+</body>
+</html>
